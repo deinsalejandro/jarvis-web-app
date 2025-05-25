@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JARVIS - Asistente Virtual</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="logo-container">
+                <div class="logo">
+                    <span class="logo-text">JARVIS</span>
+                </div>
+            </div>
+            <div class="sidebar-toggle" id="sidebar-toggle">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">Principal</div>
+                <a href="index.html" class="nav-item active">
+                    <i class="fas fa-comment-alt nav-icon"></i>
+                    <span class="nav-text">Conversación</span>
+                </a>
+                <a href="history.html" class="nav-item">
+                    <i class="fas fa-history nav-icon"></i>
+                    <span class="nav-text">Historial</span>
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">Integraciones</div>
+                <a href="#" class="nav-item" data-service="chatgpt">
+                    <i class="fas fa-robot nav-icon"></i>
+                    <span class="nav-text">ChatGPT</span>
+                    <span class="service-status"></span>
+                </a>
+                <a href="#" class="nav-item" data-service="clickup">
+                    <i class="fas fa-tasks nav-icon"></i>
+                    <span class="nav-text">ClickUp</span>
+                    <span class="service-status"></span>
+                </a>
+                <a href="#" class="nav-item" data-service="onedrive">
+                    <i class="fab fa-microsoft nav-icon"></i>
+                    <span class="nav-text">OneDrive</span>
+                    <span class="service-status offline"></span>
+                </a>
+                <a href="#" class="nav-item" data-service="gdrive">
+                    <i class="fab fa-google-drive nav-icon"></i>
+                    <span class="nav-text">Google Drive</span>
+                    <span class="service-status"></span>
+                </a>
+                <a href="#" class="nav-item" data-service="slack">
+                    <i class="fab fa-slack nav-icon"></i>
+                    <span class="nav-text">Slack</span>
+                    <span class="service-status offline"></span>
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">Sistema</div>
+                <a href="settings.html" class="nav-item">
+                    <i class="fas fa-cog nav-icon"></i>
+                    <span class="nav-text">Configuración</span>
+                </a>
+                <a href="help.html" class="nav-item">
+                    <i class="fas fa-question-circle nav-icon"></i>
+                    <span class="nav-text">Ayuda</span>
+                </a>
+            </div>
+            
+            <div class="user-profile">
+                <div class="avatar" id="user-avatar">MS</div>
+                <div class="user-info">
+                    <div class="user-name" id="user-name">María Sánchez</div>
+                    <div class="user-status">Conectado</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <div class="page-title">Conversación</div>
+                <div class="header-actions">
+                    <div class="jarvis-status">
+                        <div class="status-indicator"></div>
+                        <div class="status-text">JARVIS Activo</div>
+                    </div>
+                    <button class="header-button" id="notifications-btn">
+                        <i class="fas fa-bell header-button-icon"></i>
+                        <span>Notificaciones</span>
+                    </button>
+                    <button class="header-button primary" id="immersive-mode-btn">
+                        <i class="fas fa-expand header-button-icon"></i>
+                        <span>Modo Inmersivo</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="conversation-container">
+                <div class="conversation-history" id="conversation-history">
+                    <!-- Los mensajes se cargarán dinámicamente aquí -->
+                </div>
+                
+                <!-- Command Input -->
+                <div class="command-input-container">
+                    <input type="text" class="command-input" id="command-input" placeholder="Escribe un comando o pregunta a JARVIS...">
+                    <button class="command-button" id="send-command-btn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                    
+                    <!-- Command Suggestions -->
+                    <div class="command-suggestions" id="command-suggestions">
+                        <!-- Las sugerencias se cargarán dinámicamente aquí -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast Notifications Container -->
+    <div class="toast-container" id="toast-container">
+        <!-- Las notificaciones toast se añadirán dinámicamente aquí -->
+    </div>
+    
+    <!-- Templates para contenido dinámico -->
+    <template id="message-template">
+        <div class="message">
+            <div class="message-avatar">
+                <span class="avatar-initials"></span>
+            </div>
+            <div class="message-content">
+                <div class="message-header">
+                    <div class="message-sender"></div>
+                    <div class="message-time"></div>
+                </div>
+                <div class="message-bubble">
+                    <div class="message-text"></div>
+                </div>
+            </div>
+        </div>
+    </template>
+    
+    <template id="integration-card-template">
+        <div class="integration-card">
+            <div class="integration-header">
+                <div class="integration-icon">
+                    <i></i>
+                </div>
+                <div class="integration-title"></div>
+            </div>
+            <div class="integration-content"></div>
+            <div class="integration-actions"></div>
+        </div>
+    </template>
+    
+    <template id="task-item-template">
+        <div class="task-item">
+            <div class="task-checkbox"></div>
+            <div class="task-name"></div>
+            <div class="task-due"></div>
+        </div>
+    </template>
+    
+    <template id="suggestion-item-template">
+        <div class="suggestion-item">
+            <i class="suggestion-icon"></i>
+            <div class="suggestion-text"></div>
+            <div class="suggestion-shortcut">Tab</div>
+        </div>
+    </template>
+    
+    <template id="toast-template">
+        <div class="toast">
+            <i class="toast-icon"></i>
+            <div class="toast-content">
+                <div class="toast-title"></div>
+                <div class="toast-message"></div>
+            </div>
+            <button class="toast-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </template>
+    
+    <script src="js/main.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/conversation.js"></script>
+    <script src="js/ui.js"></script>
+</body>
+</html>
